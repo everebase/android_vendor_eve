@@ -65,15 +65,15 @@ function setup_vendor() {
         exit 1
     fi
 
-    export GZOSP_ROOT="$3"
-    if [ ! -d "$GZOSP_ROOT" ]; then
-        echo "\$GZOSP_ROOT must be set and valid before including this script!"
+    export EVE_ROOT="$3"
+    if [ ! -d "$EVE_ROOT" ]; then
+        echo "\$EVE_ROOT must be set and valid before including this script!"
         exit 1
     fi
 
     export OUTDIR=vendor/"$VENDOR"/"$DEVICE"
-    if [ ! -d "$GZOSP_ROOT/$OUTDIR" ]; then
-        mkdir -p "$GZOSP_ROOT/$OUTDIR"
+    if [ ! -d "$EVE_ROOT/$OUTDIR" ]; then
+        mkdir -p "$EVE_ROOT/$OUTDIR"
     fi
 
     VNDNAME="$6"
@@ -81,9 +81,9 @@ function setup_vendor() {
         VNDNAME="$DEVICE"
     fi
 
-    export PRODUCTMK="$GZOSP_ROOT"/"$OUTDIR"/"$VNDNAME"-vendor.mk
-    export ANDROIDMK="$GZOSP_ROOT"/"$OUTDIR"/Android.mk
-    export BOARDMK="$GZOSP_ROOT"/"$OUTDIR"/BoardConfigVendor.mk
+    export PRODUCTMK="$EVE_ROOT"/"$OUTDIR"/"$VNDNAME"-vendor.mk
+    export ANDROIDMK="$EVE_ROOT"/"$OUTDIR"/Android.mk
+    export BOARDMK="$EVE_ROOT"/"$OUTDIR"/BoardConfigVendor.mk
 
     if [ "$4" == "true" ] || [ "$4" == "1" ]; then
         COMMON=1
@@ -738,15 +738,15 @@ function get_file() {
 # Convert apk|jar .odex in the corresposing classes.dex
 #
 function oat2dex() {
-    local GZOSP_TARGET="$1"
+    local EVE_TARGET="$1"
     local OEM_TARGET="$2"
     local SRC="$3"
     local TARGET=
     local OAT=
 
     if [ -z "$BAKSMALIJAR" ] || [ -z "$SMALIJAR" ]; then
-        export BAKSMALIJAR="$GZOSP_ROOT"/vendor/gzosp/build/tools/smali/baksmali.jar
-        export SMALIJAR="$GZOSP_ROOT"/vendor/gzosp/build/tools/smali/smali.jar
+        export BAKSMALIJAR="$EVE_ROOT"/vendor/eve/build/tools/smali/baksmali.jar
+        export SMALIJAR="$EVE_ROOT"/vendor/eve/build/tools/smali/smali.jar
     fi
 
     # Extract existing boot.oats to the temp folder
@@ -771,11 +771,11 @@ function oat2dex() {
         FULLY_DEODEXED=1 && return 0 # system is fully deodexed, return
     fi
 
-    if [ ! -f "$GZOSP_TARGET" ]; then
+    if [ ! -f "$EVE_TARGET" ]; then
         return;
     fi
 
-    if grep "classes.dex" "$GZOSP_TARGET" >/dev/null; then
+    if grep "classes.dex" "$EVE_TARGET" >/dev/null; then
         return 0 # target apk|jar is already odexed, return
     fi
 
@@ -879,7 +879,7 @@ function extract() {
     local HASHLIST=( ${PRODUCT_COPY_FILES_HASHES[@]} ${PRODUCT_PACKAGES_HASHES[@]} )
     local COUNT=${#FILELIST[@]}
     local SRC="$2"
-    local OUTPUT_ROOT="$GZOSP_ROOT"/"$OUTDIR"/proprietary
+    local OUTPUT_ROOT="$EVE_ROOT"/"$OUTDIR"/proprietary
     local OUTPUT_TMP="$TMPDIR"/"$OUTDIR"/proprietary
 
     if [ "$SRC" = "adb" ]; then
@@ -887,7 +887,7 @@ function extract() {
     fi
 
     if [ -f "$SRC" ] && [ "${SRC##*.}" == "zip" ]; then
-        DUMPDIR="$GZOSP_ROOT"/system_dump
+        DUMPDIR="$EVE_ROOT"/system_dump
 
         # Check if we're working with the same zip that was passed last time.
         # If so, let's just use what's already extracted.
@@ -907,7 +907,7 @@ function extract() {
             # If OTA is block based, extract it.
             elif [ -a "$DUMPDIR"/system.new.dat ]; then
                 echo "Converting system.new.dat to system.img"
-                python "$GZOSP_ROOT"/vendor/gzosp/build/tools/sdat2img.py "$DUMPDIR"/system.transfer.list "$DUMPDIR"/system.new.dat "$DUMPDIR"/system.img 2>&1
+                python "$EVE_ROOT"/vendor/eve/build/tools/sdat2img.py "$DUMPDIR"/system.transfer.list "$DUMPDIR"/system.new.dat "$DUMPDIR"/system.img 2>&1
                 rm -rf "$DUMPDIR"/system.new.dat "$DUMPDIR"/system
                 mkdir "$DUMPDIR"/system "$DUMPDIR"/tmp
                 echo "Requesting sudo access to mount the system.img"
@@ -1059,7 +1059,7 @@ function extract_firmware() {
     local FILELIST=( ${PRODUCT_COPY_FILES_LIST[@]} )
     local COUNT=${#FILELIST[@]}
     local SRC="$2"
-    local OUTPUT_DIR="$GZOSP_ROOT"/"$OUTDIR"/radio
+    local OUTPUT_DIR="$EVE_ROOT"/"$OUTDIR"/radio
 
     if [ "$VENDOR_RADIO_STATE" -eq "0" ]; then
         echo "Cleaning firmware output directory ($OUTPUT_DIR).."

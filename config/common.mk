@@ -152,8 +152,8 @@ else ifeq ($(TARGET_BOOT_ANIMATION_RES),1080)
 else ifeq ($(TARGET_BOOT_ANIMATION_RES),1440)
      PRODUCT_COPY_FILES += vendor/eve/prebuilt/common/bootanim/bootanimation_1440.zip:system/media/bootanimation.zip
 else
-    $(warning "PixelStyle: TARGET_BOOT_ANIMATION_RES is undefined, assuming 1080p")
-     PRODUCT_COPY_FILES += vendor/pixelstyle/media/bootanimation_1080.zip:system/media/bootanimation.zip
+    $(warning "Eve: TARGET_BOOT_ANIMATION_RES is undefined, assuming 1080p")
+     PRODUCT_COPY_FILES += vendor/eve/prebuilt/common/bootanim/bootanimation_1080.zip:system/media/bootanimation.zip
 endif
 
 # Google sounds

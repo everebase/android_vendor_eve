@@ -177,32 +177,10 @@ PRODUCT_COPY_FILES += \
 endif
 endif
 
-# Versioning System
-# Eve first version.
-PRODUCT_VERSION_MAJOR = 9
-PRODUCT_VERSION_MINOR = Alpha
-PRODUCT_VERSION_MAINTENANCE = 1.0
-EVE_POSTFIX := -$(shell date +"%Y%m%d-%H%M")
-ifdef EVE_BUILD_EXTRA
-    EVE_POSTFIX := -$(EVE_BUILD_EXTRA)
-endif
-
-ifndef EVE_BUILD_TYPE
-    EVE_BUILD_TYPE := UNOFFICIAL
-endif
-
-# Set all versions
-EVE_VERSION := Eve-$(EVE_BUILD)-$(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR).$(PRODUCT_VERSION_MAINTENANCE)-$(EVE_BUILD_TYPE)$(EVE_POSTFIX)
-EVE_MOD_VERSION := Eve-$(EVE_BUILD)-$(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR).$(PRODUCT_VERSION_MAINTENANCE)-$(EVE_BUILD_TYPE)$(EVE_POSTFIX)
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    BUILD_DISPLAY_ID=$(BUILD_ID) \
-    eve.ota.version=$(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR).$(PRODUCT_VERSION_MAINTENANCE) \
-    ro.eve.version=$(EVE_VERSION) \
-    ro.modversion=$(EVE_MOD_VERSION) \
-    ro.eve.buildtype=$(EVE_BUILD_TYPE)
-
 # Google sounds
 include vendor/eve/google/GoogleAudio.mk
 
 EXTENDED_POST_PROCESS_PROPS := vendor/eve/tools/gzosp_process_props.py
+
+# Version
+include vendor/eve/config/version.mk

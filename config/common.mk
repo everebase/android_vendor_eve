@@ -99,7 +99,7 @@ PRODUCT_PACKAGES += \
     Calculator \
     LatinIME \
     BluetoothExt \
-    Launcher3Dark
+    Launcher3
 
 
 # Extra tools
